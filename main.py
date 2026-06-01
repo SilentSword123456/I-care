@@ -2,8 +2,8 @@ import threading
 import systemtray
 import timer
 
-timeSec = 1*60
-breakSec = 20
+timeSec = 10
+breakSec = 10
 
 
 StopEvent = threading.Event()

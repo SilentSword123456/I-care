@@ -1,0 +1,3 @@
+
+def sendWarningNotification():
+    print("warning")

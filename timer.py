@@ -1,13 +1,14 @@
 import time
+
 import balckout
 import notify
 
 def scheduleBreak(timeSec, breakSec, StopEvent):
-    elapsed = 0
-    while elapsed <= timeSec and not StopEvent.is_set():
+    notify.sent = False
+    startTime = time.time()
+    while time.time() - startTime <= timeSec and not StopEvent.is_set():
         StopEvent.wait(1)
-        elapsed = elapsed + 1
-        if timeSec - 60 == elapsed:
+        if time.time() - startTime >= timeSec - 60 and not notify.sent:
             notify.sendWarningNotification()
 
     if not StopEvent.is_set():

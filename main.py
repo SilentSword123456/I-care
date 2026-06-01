@@ -1,4 +1,5 @@
 import threading
+import keys
 import systemtray
 import timer
 
@@ -24,6 +25,7 @@ def start():
 
 systemtrayThread = threading.Thread(target=systemtray.start, args=[stop])
 timerThread = Worker(timeSec, breakSec)
+keyboardThread = threading.Thread(target=keys.hotkeyWatcher, daemon=True)
 
 
 
@@ -31,6 +33,7 @@ def main():
     print("Starting app...")
     systemtrayThread.start()
     timerThread.start()
+    keyboardThread.start()
     print("The app is on!")
 
 

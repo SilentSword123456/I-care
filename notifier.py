@@ -4,9 +4,10 @@ from win11toast import toast
 sent = False
 skip = False
 
-def onSkip(args):
+def skipNextBreak(args=None):
     global skip
     skip = True
+    print("Skip break!")
 
 def sendWarningNotification():
     global sent
@@ -14,7 +15,7 @@ def sendWarningNotification():
         "I Care - You have one more minute until your break!",
         icon=os.path.join(os.path.dirname(os.path.abspath(__file__)), "eye.ico"),
         button="Skip this one",
-        on_click=onSkip
+        on_click=skipNextBreak
     )
     sent = True
 

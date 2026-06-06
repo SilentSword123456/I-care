@@ -21,6 +21,7 @@ def addAllMonitors(root):
         win.geometry(f"{monitor.width}x{monitor.height}+{monitor.x}+{monitor.y}")
         win.configure(bg="black")
         win.overrideredirect(True)
+        win.attributes('-topmost', True)
 
 
 def blackoutScreen(timeSec):
@@ -29,6 +30,7 @@ def blackoutScreen(timeSec):
     root.geometry(f"{monitors[0].width}x{monitors[0].height}+{monitors[0].x}+{monitors[0].y}")
     root.configure(bg="black")
     root.overrideredirect(True)
+    root.attributes('-topmost', True)
 
     addAllMonitors(root)
 

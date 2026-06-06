@@ -1,36 +1,47 @@
+import sys
 import threading
+
+import admin
 import keys
 import systemtray
 import timer
-
-timeSec = 10
-breakSec = 10
+from config import *
 
 
-StopEvent = threading.Event()
 
-class Worker(threading.Thread):
-    def __init__(self, timer, breakSec):
-        super().__init__()
-        self.timer = timer
-        self.breakSec = breakSec
-    def run(self):
-        while not StopEvent.is_set():
-            timer.scheduleBreak(self.timer, self.breakSec, StopEvent)
-
-def stop():
-    StopEvent.set()
-def start():
-    StopEvent.clear()
-
-systemtrayThread = threading.Thread(target=systemtray.start, args=[stop])
-timerThread = Worker(timeSec, breakSec)
-keyboardThread = threading.Thread(target=keys.hotkeyWatcher, daemon=True)
 
 
 
 def main():
     print("Starting app...")
+    if not admin.isAdmin():
+        admin.launchWithAdmin()
+        sys.exit()
+
+    config = Config()
+    config.loadConfig()
+
+
+    StopEvent = threading.Event()
+
+    class Worker(threading.Thread):
+        def __init__(self, timer, breakSec):
+            super().__init__()
+            self.timer = timer
+            self.breakSec = breakSec
+        def run(self):
+            while not StopEvent.is_set():
+                timer.scheduleBreak(self.timer, self.breakSec, StopEvent)
+
+    def stop():
+        StopEvent.set()
+    def start():
+        StopEvent.clear()
+
+    systemtrayThread = threading.Thread(target=systemtray.start, args=[stop])
+    timerThread = Worker(config.workSec, config.breakSec)
+    keyboardThread = threading.Thread(target=keys.hotkeyWatcher, daemon=True)
+
     systemtrayThread.start()
     timerThread.start()
     keyboardThread.start()
